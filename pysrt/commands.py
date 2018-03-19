@@ -177,9 +177,12 @@ class SubRipShifter(object):
             part_file.save(path=file_name, encoding=self.output_encoding)
 
     def create_backup(self):
+        backup_idx = 1
         backup_file = self.arguments.file + self.BACKUP_EXTENSION
-        if not os.path.exists(backup_file):
-            shutil.copy2(self.arguments.file, backup_file)
+        while os.path.exists(backup_file):
+            backup_file = self.arguments.file + ('.%i' % backup_idx) + self.BACKUP_EXTENSION
+            backup_idx += 1
+        shutil.copy2(self.arguments.file, backup_file)
         self.output_file_path = self.arguments.file
         self.arguments.file = backup_file
 
